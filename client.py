@@ -2,7 +2,9 @@
 # inspired by
 # https://arduinogetstarted.com/tutorials/arduino-temperature-humidity-sensor
 # Testing use serial connection to arduino with setup
+# read from arduino onewire for multiple ds18b20 temperature sensors and post a data file to a mobileTemperatureServer API
 #
+
 import serial
 from datetime import datetime
 import json
@@ -31,7 +33,10 @@ def parse_data (s):
                cont = ","
     return sensor_readings
 
+#
 # "MAIN"
+#
+
 with open("config.json") as json_data_file:
     data = json.load(json_data_file)
 API_ENDPOINT = data["API_ENDPOINT"]
