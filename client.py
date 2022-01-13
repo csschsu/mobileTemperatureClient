@@ -58,7 +58,7 @@ example = { "counter": '1234',
       ,{ "id" : "id4-pi2", "temp" : 20.7 }
   ]
     , "location": "pi-2"}
-#text = "{'counter' : '" + str( datetime.timestamp(dt)) +'","
+
 text = '{"counter" : "' + str( datetime.timestamp(dt)) +'",'
 text = text + '"values" : [ '
 for item in temp_items:
