@@ -2,13 +2,16 @@
 # inspired by
 # https://arduinogetstarted.com/tutorials/arduino-temperature-humidity-sensor
 # Testing use serial connection to arduino with setup
-# read from arduino onewire for multiple ds18b20 temperature sensors and post a data file to a mobileTemperatureServer API
+# read from arduino onewire for multiple ds18b20 temperature sensors and post a
+# data file to a mobileTemperatureServer API
 #
 
-import serial
-from datetime import datetime
 import json
+from datetime import datetime
+
 import requests
+import serial
+
 
 def getmeasurepoint():
     try:
@@ -17,21 +20,24 @@ def getmeasurepoint():
     except:
         return "ds18b20"
 
-def parse_data (s):
-    unique=[]
-    sensor_readings=[]
-    cont=""
+
+def parse_data(s):
+    unique = []
+    sensor_readings = []
+    cont = ""
     readings = s.split(";")
-    for reading in reversed(readings) :
-      values = reading.split(":")
-      if len(values) == 3 :
-         if values[0] == "Sensor" :
-            sensor_id =  values[1] 
-            if sensor_id not in unique:
-               unique.append(sensor_id)
-               sensor_readings.append( cont + '{ "id" : "' + values[1] + '-' + place + '", "temp" : ' + values[2] + "}")
-               cont = ","
+    for reading in reversed(readings):
+        values = reading.split(":")
+        if len(values) == 3:
+            if values[0] == "Sensor":
+                sensor_id = values[1]
+                if sensor_id not in unique:
+                    unique.append(sensor_id)
+                    sensor_readings.append(
+                        cont + '{ "id" : "' + values[1] + '-' + place + '", "temp" : ' + values[2] + "}")
+                    cont = ","
     return sensor_readings
+
 
 #
 # "MAIN"
@@ -40,7 +46,7 @@ def parse_data (s):
 with open("config.json") as json_data_file:
     data = json.load(json_data_file)
 API_ENDPOINT = data["API_ENDPOINT"]
-DEVICE=data["DEVICE"]
+DEVICE = data["DEVICE"]
 
 lastplace = getmeasurepoint()
 place = lastplace.replace("\n", "")
@@ -52,27 +58,28 @@ print("Start log " + place + ".log tid:" + ts)
 
 ser_bytes = ser.read(200)
 s: str = ser_bytes[0:len(ser_bytes) - 2].decode("utf-8")
-temp_items=  parse_data(s)
-dt =  datetime.now()
-print ( datetime.timestamp(dt))
-example = { "counter": '1234',
-  "values": [
-       { "id" : "id1-pi2", "temp" : 5.38 }
-      ,{ "id" : "id2-pi2", "temp" : 28.75 }
-      ,{ "id" : "id3-pi2", "temp" : 18.38 }
-      ,{ "id" : "id4-pi2", "temp" : 20.7 }
-  ]
-    , "location": "pi-2"}
+temp_items = parse_data(s)
+dt = datetime.now()
+print(datetime.timestamp(dt))
 
-text = '{"counter" : "' + str( datetime.timestamp(dt)) +'",'
+text = '{"counter" : "' + str(datetime.timestamp(dt)) + '",'
 text = text + '"values" : [ '
 for item in temp_items:
-   text = text + item 
-text=text + '], "location" : "pi-2"}'
+    text = text + item
+text = text + '], "location" : "pi-2"}'
 # print (text)
 payload = json.loads(text)
 
 headers = {'Content-Type': 'application/json'}
-r = requests.post(url=API_ENDPOINT, data=json.dumps(payload),headers=headers)
+r = requests.post(url=API_ENDPOINT, data=json.dumps(payload), headers=headers)
 print(r.text + " status : " + str(r.status_code))
 
+# This shows how the file should look when sent
+example_file_data = {"counter": "1234",
+                     "values": [
+                       {"id": "id1-pi2", "temp": 5.38},
+                       {"id": "id2-pi2", "temp": 28.75},
+                       {"id": "id3-pi2", "temp": 18.38},
+                       {"id": "id4-pi2", "temp": 20.7}
+                     ],
+                     "location": "pi-2"}
