@@ -69,15 +69,10 @@ text = text + '"values" : [ '
 for item in temp_items:
    text = text + item 
 text=text + '], "location" : "pi-2"}'
-print (text)
+# print (text)
 payload = json.loads(text)
 
-
-with open("config.json") as json_data_file:
-    data = json.load(json_data_file)
-API_ENDPOINT = data["API_ENDPOINT"]
 headers = {'Content-Type': 'application/json'}
-
 r = requests.post(url=API_ENDPOINT, data=json.dumps(payload),headers=headers)
 print(r.text + " status : " + str(r.status_code))
 
