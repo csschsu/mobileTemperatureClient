@@ -45,5 +45,5 @@ void loop(void)
   }
   
   Serial.println("");
-  delay(2000);
+  delay(20000);
 }
