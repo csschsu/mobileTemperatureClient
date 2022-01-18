@@ -1,0 +1,7 @@
+{
+  "DEVICE" : "/dev/ttyUSB0",
+  "FILENAME" : "/var/www/temperatur/temperatur.json",
+  "API_ENDPOINT" : "API to contact",
+  "LOCATION" : "PI-1",
+  "SENSOR" : "kontor"
+}
