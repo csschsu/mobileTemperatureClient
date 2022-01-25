@@ -5,10 +5,19 @@
 # read from arduino onewire for multiple ds18b20 temperature sensors and post a
 # data file to a mobileTemperatureServer API
 #
+# This shows how the file should look when sent
+# example_file_data = {"counter": "1234",
+#                     "values": [
+#                         {"id": "id1-pi2", "temp": 5.38},
+#                         {"id": "id2-pi2", "temp": 28.75},
+#                         {"id": "id3-pi2", "temp": 18.38},
+#                         {"id": "id4-pi2", "temp": 20.7}
+#                     ],
+#                     "location": "pi-2"}
+#
 
 import json
-from datetime import datetime
-
+import datetime
 import requests
 import serial
 
@@ -23,10 +32,15 @@ def parse_data():
         if len(values) == 3:
             if values[0] == "Sensor":
                 sensor_id = values[1]
-                if sensor_id not in unique:
+                fv = -999.99
+                try:
+                    fv = float(values[2])
+                except ValueError:
+                    print("sensor_id : " + sensor_id + " has invalid temperature : " + values[2])
+
+                if sensor_id not in unique and fv != -999.99:
                     unique.append(sensor_id)
-                    sensor_readings.append(
-                        cont + '{ "id" : "' + values[1] + '-' + SENSOR + '", "temp" : ' + values[2] + "}")
+                    sensor_readings.append(cont + '{ "id" : "' + values[1] + '-' + SENSOR + '", "temp" : ' + ("%0.2f" % fv) + "}")
                     cont = ","
     return sensor_readings
 
@@ -45,15 +59,15 @@ with open("setup.json") as json_data_file:
 
 ser = serial.Serial(DEVICE, 9600, timeout=5)
 ser.flushInput()
-ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-print("Start log " + LOCATION + ".log tid:" + ts)
+
+dt = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+print("Start log " + LOCATION + ".log tid:" + dt)
 
 ser_bytes = ser.read(200)
 s: str = ser_bytes[0:len(ser_bytes) - 2].decode("utf-8")
 temp_items = parse_data()
-dt = datetime.now()
 
-text = '{"counter" : "' + str(datetime.timestamp(dt)) + '",'
+text = '{"counter" : "' + dt + '",'
 text = text + '"values" : [ '
 for item in temp_items:
     text = text + item
@@ -71,13 +85,3 @@ else:
     print(r.text + " status : " + str(r.status_code))
 
 exit()
-
-# This shows how the file should look when sent
-example_file_data = {"counter": "1234",
-                     "values": [
-                         {"id": "id1-pi2", "temp": 5.38},
-                         {"id": "id2-pi2", "temp": 28.75},
-                         {"id": "id3-pi2", "temp": 18.38},
-                         {"id": "id4-pi2", "temp": 20.7}
-                     ],
-                     "location": "pi-2"}
