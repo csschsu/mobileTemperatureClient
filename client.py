@@ -76,11 +76,12 @@ try:
 
     temp_items = parse_data()
 
-    text = '{"counter" : "' + dt + '",'
+    text = '{"counter" : 1234,'
     text = text + '"values" : [ '
     for item in temp_items:
         text = text + item
     text = text + '], "location" : "' + LOCATION + '"}'
+    print(text)
 
     if FILENAME != "":
         f = open(FILENAME, "w")
@@ -89,7 +90,6 @@ try:
 
     if API_ENDPOINT != "":
         payload = json.loads(text)
-        print(payload)
         headers = {'Content-Type': 'application/json'}
         r = requests.post(url=API_ENDPOINT, data=json.dumps(payload), headers=headers)
         print(r.text)
