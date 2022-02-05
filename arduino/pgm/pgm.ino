@@ -43,7 +43,7 @@ void loop(void)
     Serial.print(tempC);
     Serial.print(";");
   }
-  
   Serial.println("");
+  Serial.flush();
   delay(20000);
 }

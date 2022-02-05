@@ -20,6 +20,8 @@ import json
 import datetime
 import requests
 import serial
+from check import temp_value
+
 
 
 class DataError(Exception):
@@ -36,17 +38,16 @@ def parse_data():
         if len(values) == 3:
             if values[0] == "Sensor":
                 sensor_id = values[1]
-                try:
-                    fv = float(values[2])
-                except ValueError:
-                    print("sensor_id : " + sensor_id + " has invalid temperature : " + values[2])
-                    raise DataError
-
                 if sensor_id not in unique:
-                    unique.append(sensor_id)
-                    sensor_readings.append(cont + '{ "id" : "' + values[1] + '-' + SENSOR + '", "temp" : ' + ("%0.2f" % fv) + "}")
-                    cont = ","
-
+                    try:
+                        temp_value(values[2])    # raises ValueError
+                        unique.append(sensor_id)
+                        sensor_readings.append(cont + '{ "id" : "' + values[1] + '-' + SENSOR + '", "temp" : ' + values[2] + "}")
+                        cont = ","
+                    except ValueError:
+                       print("sensor_id : " + sensor_id + " has invalid temperature : " + values[2])
+    if sensor_readings == [] :
+       raise DataError
     return sensor_readings
 
 #
@@ -69,19 +70,21 @@ ser = serial.Serial(DEVICE, READSPEED, timeout=TIMEOUT)
 ser.flushInput()
 
 dt = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+s = ""
 
 try:
     ser_bytes = ser.read(BUFFERSIZE)
     s: str = ser_bytes[0:len(ser_bytes) - 2].decode("utf-8")
+    print(s)
 
     temp_items = parse_data()
 
-    text = '{"counter" : 1234,'
+    text = '{"counter" : 1234 ,'
     text = text + '"values" : [ '
     for item in temp_items:
         text = text + item
     text = text + '], "location" : "' + LOCATION + '"}'
-    print(text)
+    print(dt + " " + text)
 
     if FILENAME != "":
         f = open(FILENAME, "w")
@@ -95,9 +98,11 @@ try:
         print(r.text)
 
 except UnicodeError:
-    print("Error reading arduino")
+    print("Error reading arduino'")
+
 except DataError:
-    print("Error in arduino data")
+    print(dt + "Error in arduino data, start '")
+    print(s)
+    print("'end")
 
 exit()
-
