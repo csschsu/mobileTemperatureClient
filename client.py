@@ -23,7 +23,6 @@ import serial
 from check import temp_value
 
 
-
 class DataError(Exception):
     pass
 
@@ -40,15 +39,17 @@ def parse_data():
                 sensor_id = values[1]
                 if sensor_id not in unique:
                     try:
-                        temp_value(values[2])    # raises ValueError
+                        temp_value(values[2])  # raises ValueError
                         unique.append(sensor_id)
-                        sensor_readings.append(cont + '{ "id" : "' + values[1] + '-' + SENSOR + '", "temp" : ' + values[2] + "}")
+                        sensor_readings.append(
+                            cont + '{ "id" : "' + values[1] + '-' + SENSOR + '", "temp" : ' + values[2] + "}")
                         cont = ","
                     except ValueError:
-                       print("sensor_id : " + sensor_id + " has invalid temperature : " + values[2])
-    if sensor_readings == [] :
-       raise DataError
+                        print("sensor_id : " + sensor_id + " has invalid temperature : " + values[2])
+    if sensor_readings == []:
+        raise DataError
     return sensor_readings
+
 
 #
 # "MAIN"
@@ -75,7 +76,7 @@ s = ""
 try:
     ser_bytes = ser.read(BUFFERSIZE)
     s: str = ser_bytes[0:len(ser_bytes) - 2].decode("utf-8")
-    print(s)
+#    print(s)
 
     temp_items = parse_data()
 
