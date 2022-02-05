@@ -44,6 +44,5 @@ void loop(void)
     Serial.print(";");
   }
   Serial.println("");
-  Serial.flush();
-  delay(20000);
+  delay(20000);  // match reading every minute
 }
