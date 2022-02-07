@@ -15,89 +15,89 @@ class MyTestCase(unittest.TestCase):
 
     # Returns true if temp_value("val") raises an Exception
     def test_1(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(DataError):
             temp_value("12. 2")
 
     def test_2(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(DataError):
             temp_value("")
 
     def test_3(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(DataError):
             temp_value("      ")
 
     def test_4(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(DataError):
             temp_value("     ")
 
     def test_5(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(DataError):
             temp_value("  .  ")
 
     def test_6(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(DataError):
             temp_value("1")
 
     def test_7(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(DataError):
             temp_value("12345")
 
     def test_8(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(DataError):
             temp_value("12. 1")
 
     def test_9(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(DataError):
             temp_value("12.  ")
 
     def test_10(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(DataError):
             temp_value("12.444")
 
     def test_11(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(DataError):
             temp_value("AB.CD")
 
     def test_12(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(DataError):
             temp_value("1A.21")
 
     # Pressure data
     def test_20(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(DataError):
             pressure_value("1000")
 
     def test_21(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(DataError):
             pressure_value("10000.00")
 
     def test_22(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(DataError):
             pressure_value("999.000")
 
     def test_23(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(DataError):
             pressure_value("999.0A")
 
     # Humidity data
     def test_30(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(DataError):
             humidity_value("1000")
 
     def test_31(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(DataError):
             humidity_value("10000.00")
 
     def test_32(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(DataError):
             humidity_value("999.000")
 
     def test_33(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(DataError):
             humidity_value("99.0A")
 
     def test_34(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(DataError):
             humidity_value("1")
 
     def test_40(self):

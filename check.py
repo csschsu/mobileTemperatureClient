@@ -8,75 +8,75 @@ class DataError(Exception):
 
 def temp_value(s):
     if len(s) != 5:
-        raise ValueError
+        raise DataError
     if s[2] != ".":
-        raise ValueError
+        raise DataError
     for char in s:
         if char.isdigit() is False and char != ".":
-            raise ValueError
+            raise DataError
     return
 
 def id_value(s):
     if len(s) > 3:
-        raise ValueError
+        raise DataError
     for char in s:
         if char.isnumeric() is False:
-            raise ValueError
+            raise DataError
     return
 
 
 def pressure_id(s):
     if not s.startswith("Temperature"):
-        raise ValueError
+        raise DataError
     return
 
 
 def pressure_value(s):
     # 900.00 - 1100.00
     if len(s) < 6 or len(s) > 7:
-        raise ValueError
+        raise DataError
     items = s.split('.')
     if len(items[1]) != 2:
-        raise ValueError
+        raise DataError
     for char in s:
         if char.isdigit() is False and char != ".":
-            raise ValueError
+            raise DataError
     return
 
 
 def humidity_value(s):
     # 35.00
     if len(s) != 5:
-        raise ValueError
+        raise DataError
     if s[2] != ".":
-        raise ValueError
+        raise DataError
     for char in s:
         if char.isdigit() is False and char != ".":
-            raise ValueError
+            raise DataError
     return
 
 
 def sensor_id(s):
     if not s == ("Sensor"):
-        raise ValueError
+        raise DataError
     return
 
 
 def humidity_id(s):
     if not s.startswith("Humidity"):
-        raise ValueError
+        raise DataError
     return
 
 
 def start_id(s):
     if not s.startswith("Start"):
-        raise ValueError
+        raise DataError
     return
 
 
 def end_id(s):
     if not s.endswith("End"):
-        raise ValueError
+        raise DataError
     return
 
 
@@ -95,12 +95,12 @@ def _parse(buff):
                 sensor_id = values[1]
                 if sensor_id not in unique:
                     try:
-                        temp_value(values[2])  # raises ValueError
+                        temp_value(values[2])  # raises DataError
                         unique.append(sensor_id)
                         sensor_readings.append(
                             cont + '{ "id" : "' + values[1] + '-' + conf.SENSOR + '", "temp" : ' + values[2] + "}")
                         cont = ","
-                    except ValueError:
+                    except DataError:
                         print("sensor_id : " + sensor_id + " has invalid temperature : " + values[2])
     if not sensor_readings:
         raise DataError
@@ -112,6 +112,7 @@ def ds18b20_sensors_parse(s):
 
     it = []
     lines = s.split('---')
+    if len(lines) < 2: raise DataError
     if not lines[1].startswith("Sensor"): raise DataError
     if not lines[1].endswith(";"): raise DataError
 
