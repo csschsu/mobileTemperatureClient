@@ -33,16 +33,18 @@ void loop(void)
   // Send command to all the sensors for temperature conversion
   sensors.requestTemperatures(); 
   
+    Serial.print("---");
   // Display temperature from each sensor
   for (int i = 0;  i < deviceCount;  i++)
   {
-    Serial.print(";Sensor:");
+    Serial.print("Sensor:");
     Serial.print(i+1);
     Serial.print(":");
     tempC = sensors.getTempCByIndex(i);
     Serial.print(tempC);
     Serial.print(";");
   }
+    Serial.print("---");
   Serial.println("");
   delay(20000);  // match reading every minute
 }
