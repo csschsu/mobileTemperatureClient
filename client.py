@@ -58,6 +58,12 @@ try:
 except UnicodeError:
     print("Error reading arduino'")
 
+except json.decoder.JSONDecodeError:
+    print("Error reading arduino, not connected ?'")
+
+except serial.serialutil.SerialException:
+    print("Error reading arduino, not connected ?'")
+
 except DataError:
     print(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + " Error in arduino data, data: ")
     print(buff)
