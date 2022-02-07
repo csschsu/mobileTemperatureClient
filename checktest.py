@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+
+
 from check import temp_value
 from check import pressure_value
 from check import humidity_value
@@ -135,7 +138,7 @@ class MyTestCase(unittest.TestCase):
         fd.close()
         expected = ['{ "id" :1, "temp" :22.12}', ',{ "id" :2, "temp" :26.69}', ',{ "id" :3, "temp" :19.44}']
         result = ds18b20_sensors_parse(buff)
-        self.assertEqual(expected,result)
+        self.assertEqual(expected, result)
 
 
 if __name__ == '__main__':

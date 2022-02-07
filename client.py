@@ -44,7 +44,7 @@ try:
 
     buff = read_serial()
     items = ds18b20_sensors_parse(buff)
-    if conf.PRINTMSG == "Y": print (buff)
+    if conf.PRINTMSG == "Y": print(buff)
 
     text = create_response(items)
     if conf.PRINTMSG == "Y": print(text)

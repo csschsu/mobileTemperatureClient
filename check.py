@@ -16,6 +16,7 @@ def temp_value(s):
             raise DataError
     return
 
+
 def id_value(s):
     if len(s) > 3:
         raise DataError
@@ -57,7 +58,7 @@ def humidity_value(s):
 
 
 def sensor_id(s):
-    if not s == ("Sensor"):
+    if not s == "Sensor":
         raise DataError
     return
 
@@ -92,16 +93,15 @@ def _parse(buff):
         values = reading.split(":")
         if len(values) == 3:
             if values[0] == "Sensor":
-                sensor_id = values[1]
-                if sensor_id not in unique:
+                if values[1] not in unique:
                     try:
                         temp_value(values[2])  # raises DataError
-                        unique.append(sensor_id)
+                        unique.append(values[1])
                         sensor_readings.append(
                             cont + '{ "id" : "' + values[1] + '-' + conf.SENSOR + '", "temp" : ' + values[2] + "}")
                         cont = ","
                     except DataError:
-                        print("sensor_id : " + sensor_id + " has invalid temperature : " + values[2])
+                        print("sensor_id : " + values[1] + " has invalid temperature : " + values[2])
     if not sensor_readings:
         raise DataError
     return sensor_readings
@@ -121,11 +121,11 @@ def ds18b20_sensors_parse(s):
     filler = ""
     for sensor in sensors:
         items = sensor.split(':')
-        if len(items) != 3 : raise DataError  # not Sensor:X:YY.ZZ
+        if len(items) != 3: raise DataError  # not Sensor:X:YY.ZZ
         sensor_id(items[0])
         id_value(items[1])
         temp_value(items[2])
-        it.append( filler + '{ "id" :' + items[1] + ', "temp" :' + items[2] + '}'  )
+        it.append(filler + '{ "id" :' + items[1] + ', "temp" :' + items[2] + '}')
         filler = ","
     return it
 
