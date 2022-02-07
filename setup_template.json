@@ -1,10 +1,12 @@
 {
   "DEVICE" : "/dev/ttyUSB0",
   "FILENAME" : "/var/www/temperatur/temperatur.json",
-  "API_ENDPOINT" : "",
+  "API_ENDPOINT" : "http:localhost:1111",
   "LOCATION" : "PI-1",
   "SENSOR" : "kontor",
   "BUFFERSIZE" : 220,
   "READSPEED" : 9600,
-  "TIMEOUT" : 5
+  "TIMEOUT" : 5,
+  "TESTDIR" : "/home/christer/new_work/mobileTemperatureClient/test/",
+  "PRINTMSG" : "Y"
 }
