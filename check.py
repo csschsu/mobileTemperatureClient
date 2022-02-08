@@ -125,7 +125,7 @@ def ds18b20_sensors_parse(s):
         sensor_id(items[0])
         id_value(items[1])
         temp_value(items[2])
-        it.append(filler + '{ "id" :' + items[1] + ', "temp" :' + items[2] + '}')
+        it.append(filler + '{ "id" : "' + items[1] + '", "temp" : ' + items[2] + '}')
         filler = ","
     return it
 
