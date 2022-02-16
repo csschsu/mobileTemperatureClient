@@ -46,5 +46,5 @@ void loop(void)
   }
     Serial.print("---");
   Serial.println("");
-  delay(20000);  // match reading every minute
+  delay(20000);  // 20 sec, 
 }

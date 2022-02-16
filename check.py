@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+import datetime
+
 import config
 
 
@@ -27,7 +29,7 @@ def id_value(s):
 
 
 def pressure_id(s):
-    if not s.startswith("Temperature"):
+    if not s.startswith("Pressure"):
         raise DataError
     return
 
@@ -82,29 +84,6 @@ def end_id(s):
 
 
 conf = config.Config()
-
-
-def _parse(buff):
-    unique = []
-    sensor_readings = []
-    cont = ""
-    readings = buff.split(";")
-    for reading in reversed(readings):
-        values = reading.split(":")
-        if len(values) == 3:
-            if values[0] == "Sensor":
-                if values[1] not in unique:
-                    try:
-                        temp_value(values[2])  # raises DataError
-                        unique.append(values[1])
-                        sensor_readings.append(
-                            cont + '{ "id" : "' + values[1] + '-' + conf.SENSOR + '", "temp" : ' + values[2] + "}")
-                        cont = ","
-                    except DataError:
-                        print("sensor_id : " + values[1] + " has invalid temperature : " + values[2])
-    if not sensor_readings:
-        raise DataError
-    return sensor_readings
 
 
 def ds18b20_sensors_parse(s):
@@ -164,5 +143,6 @@ def create_response(items):
     text = text + '"values" : [ '
     for item in items:
         text = text + item
-    text = text + '], "location" : "' + conf.LOCATION + '"}'
+    text = text + '], "location" : "' + conf.LOCATION + '",' + \
+           '"datetime": "' + datetime.datetime.now().strftime("%Y-%m-%d:%H:%M:%S") + '"}'
     return text

@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# Serial read of Arduino one-wire implementation of the ds18b20 temperature sensor see pgm.ino
+# Serial read of Arduino one-wire implementation of the ds18b20 temperature sensor see (pgm) ds18b20.ino
 # Sending temperature data to file/API
 #
 
@@ -30,9 +30,10 @@ def create_file():
 
 
 def send_to_api():
-    payload = json.loads(text)
+#    payload = json.loads(text)
     headers = {'Content-Type': 'application/json'}
-    r = requests.post(url=conf.API_ENDPOINT, data=json.dumps(payload), headers=headers)
+#    r = requests.post(url=conf.API_ENDPOINT, data=json.dumps(payload), headers=headers)
+    r = requests.post(url=conf.API_ENDPOINT, data=text, headers=headers)
     print(r.text)
 
 
@@ -58,9 +59,9 @@ try:
 except UnicodeError:
     print("Error reading arduino'")
 
-except json.decoder.JSONDecodeError:
+except json.decoder.JSONDecodeError as e:
     print("Error reading arduino, not connected ?'")
-
+    print(e)
 except serial.serialutil.SerialException:
     print("Error reading arduino, not connected ?'")
 
