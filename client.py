@@ -30,11 +30,13 @@ def create_file():
 
 
 def send_to_api():
-#    payload = json.loads(text)
-    headers = {'Content-Type': 'application/json'}
-#    r = requests.post(url=conf.API_ENDPOINT, data=json.dumps(payload), headers=headers)
-    r = requests.post(url=conf.API_ENDPOINT, data=text, headers=headers)
-    print(r.text)
+    try:
+        headers = {'Content-Type': 'application/json'}
+        r = requests.post(url=conf.API_ENDPOINT, data=text, headers=headers)
+        print(r.text)
+    except requests.exceptions.ConnectionError as e:
+        print(e)
+        # TODO reboot ?
 
 
 #
@@ -64,6 +66,7 @@ except json.decoder.JSONDecodeError as e:
     print(e)
 except serial.serialutil.SerialException:
     print("Error reading arduino, not connected ?'")
+
 
 except DataError:
     print(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + " Error in arduino data, data: ")
