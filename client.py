@@ -8,8 +8,6 @@ import json
 import datetime
 import requests
 import serial
-from urllib3.exceptions import NewConnectionError
-
 from config import Config
 from check import DataError
 from check import create_response
