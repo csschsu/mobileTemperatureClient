@@ -3,10 +3,13 @@
 # Sending temperature data to file/API
 #
 
+import os
 import json
 import datetime
 import requests
 import serial
+from urllib3.exceptions import NewConnectionError
+
 from config import Config
 from check import DataError
 from check import create_response
@@ -30,9 +33,7 @@ def create_file():
 
 
 def send_to_api():
-#    payload = json.loads(text)
     headers = {'Content-Type': 'application/json'}
-#    r = requests.post(url=conf.API_ENDPOINT, data=json.dumps(payload), headers=headers)
     r = requests.post(url=conf.API_ENDPOINT, data=text, headers=headers)
     print(r.text)
 
@@ -68,5 +69,8 @@ except serial.serialutil.SerialException:
 except DataError:
     print(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + " Error in arduino data, data: ")
     print(buff)
+
+except NewConnectionError as e:
+    os.system('systemctl reboot -i')
 
 exit()

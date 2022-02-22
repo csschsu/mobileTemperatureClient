@@ -34,6 +34,8 @@ void loop(void)
   sensors.requestTemperatures(); 
   
     Serial.print("---");
+    Serial.print("ds18b20;");  // identifies this arduino setup
+
   // Display temperature from each sensor
   for (int i = 0;  i < deviceCount;  i++)
   {
